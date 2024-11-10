@@ -1,0 +1,47 @@
+package com.telusko.controller;
+
+import com.telusko.entity.Schools;
+import com.telusko.service.SchoolsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+public class SchoolsController {
+
+    @Autowired
+    private SchoolsService service;
+
+    @PostMapping("/addSchools")
+    ResponseEntity<String> addSchools(@RequestBody Schools schools) {
+        String status = service.registerSchool(schools);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllSchools")
+    ResponseEntity<List<Schools>> fetchAllSchools() {
+        List<Schools> status = service.findAllSchools();
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @GetMapping("/getSchoolById/{id}")
+    ResponseEntity<Schools> getSchoolsById(@PathVariable("id") Long id) {
+        Schools status = service.getSchoolById(id);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateSchools/{id}")
+    ResponseEntity<Schools> updateSchools(@PathVariable("id") Long id, @RequestBody Schools schools) {
+        Schools status = service.updateSchool(id, schools);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteSchools/{id}")
+    ResponseEntity<?> deleteSchools(@PathVariable("id") Long id) {
+        Object status = service.deleteSchoolById(id);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+}
