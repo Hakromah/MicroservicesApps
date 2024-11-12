@@ -5,6 +5,7 @@ import com.telusko.service.SchoolsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,18 @@ public class SchoolsController {
     @Autowired
     private SchoolsService service;
 
+
+    private Environment env;
+
+    public SchoolsController(Environment env) {
+        this.env = env;
+    }
+
     @Operation(summary = "Post method", description = "Add School Details to database")
     @PostMapping("/addSchools")
     ResponseEntity<String> addSchools(@RequestBody Schools schools) {
+
+
         String status = service.registerSchool(schools);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
@@ -28,6 +38,10 @@ public class SchoolsController {
     @GetMapping("/getAllSchools")
     @Operation(summary = "Get method", description = "Get All School Details from database")
     ResponseEntity<List<Schools>> fetchAllSchools() {
+
+        String portNo = env.getProperty("server.port");
+        System.out.println(portNo);
+
         List<Schools> status = service.findAllSchools();
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
